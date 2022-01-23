@@ -476,15 +476,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6299901779997573524, guid: baa66fc5be1efd240bfb6ddb77525ab3,
-        type: 3}
-      propertyPath: movementSettings.StrafeSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6299901779997573525, guid: baa66fc5be1efd240bfb6ddb77525ab3,
-        type: 3}
-      propertyPath: WallRunUpForce_DecreaseRate
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: baa66fc5be1efd240bfb6ddb77525ab3, type: 3}
