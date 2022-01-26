@@ -101,6 +101,15 @@ namespace Abilities
                 _wheel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
             }
+
+
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                if(SelectedAbility != null)
+                {
+                    SelectedAbility.Use(new AbilityContext());
+                }
+            }
         }
     }
 }

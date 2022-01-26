@@ -6,9 +6,10 @@ namespace Abilities
 {
     public class Timescape : Ability
     {
+        private CameraController _controller;
         protected override void StartInternal()
         {
-            // Intentionally unimplemented
+            _controller = GetComponent<CameraController>();
         }
 
         protected override void UpdateInternal()
@@ -16,9 +17,9 @@ namespace Abilities
             // Intentionally unimplemented
         }
 
-        protected override void Use(AbilityContext context)
+        public override void Use(AbilityContext context)
         {
-            // intentionally unimplemented
+            _controller.SwitchCameras();
         }
     }
 }

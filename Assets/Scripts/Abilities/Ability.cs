@@ -25,6 +25,6 @@ namespace Abilities
         }
         protected abstract void StartInternal();
         protected abstract void UpdateInternal();
-        protected abstract void Use(AbilityContext context);
+        public abstract void Use(AbilityContext context);
     }
 }

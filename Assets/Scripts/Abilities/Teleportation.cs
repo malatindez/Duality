@@ -16,7 +16,7 @@ namespace Abilities
             // Intentionally unimplemented
         }
 
-        protected override void Use(AbilityContext context)
+        public override void Use(AbilityContext context)
         {
             // intentionally unimplemented
         }
