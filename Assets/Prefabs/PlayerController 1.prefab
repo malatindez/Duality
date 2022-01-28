@@ -68,8 +68,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
 --- !u!1 &1871082279982563974
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,8 +136,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
 --- !u!1 &1871082280039894140
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,7 +159,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871082280039894140}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -175,7 +171,7 @@ Transform:
   - {fileID: 1871082279982563970}
   - {fileID: 1871082281252953344}
   - {fileID: 1871082280098216922}
-  m_Father: {fileID: 1871082280569255551}
+  m_Father: {fileID: 2593411163409252447}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1871082280060390462
@@ -246,8 +242,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
 --- !u!1 &1871082280087561636
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,8 +363,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
 --- !u!1 &1871082280262525485
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,14 +417,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871082280450949159}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1871082280262525484}
   - {fileID: 1871082281277575037}
-  m_Father: {fileID: 1871082280569255551}
+  m_Father: {fileID: 2593411163409252447}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1871082280569255489
@@ -468,9 +460,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1871082281235162482}
-  - {fileID: 1871082280039894143}
-  - {fileID: 1871082280450949158}
+  - {fileID: 2593411163409252447}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -558,27 +548,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 960975ce73e3b804f971609414f6eb02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canrotate: 0
-  cam: {fileID: 1871082281522721954}
-  movementSettings:
+  EnableMouseControls: 1
+  CameraReference: {fileID: 0}
+  MovementSettings:
     ForwardSpeed: 2
     BackwardSpeed: 2
     StrafeSpeed: 3
     SpeedInAir: 0.1
     JumpForce: 7
-  mouseLook:
+  MouseSettings:
     XSensitivity: 2
     YSensitivity: 2
-    clampVerticalRotation: 1
+    ClampVerticalRotation: 1
     MinimumX: -90
     MaximumX: 90
-    smooth: 0
-    smoothTime: 5
-    m_CharacterTargetRot: {x: 0, y: 0, z: 0, w: 0}
-    m_CameraTargetRot: {x: 0, y: 0, z: 0, w: 0}
-  relativevelocity: {x: 0, y: 0, z: 0}
-  detectGround: {fileID: 6299901780143193322}
-  Wallrunning: 0
+    Smooth: 0
+    SmoothTime: 5
+  DetectGround: {fileID: 0}
+  RelativeVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &1871082281235162483
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,13 +589,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871082281235162483}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1871082280087561639}
-  m_Father: {fileID: 1871082280569255551}
+  m_Father: {fileID: 2593411163409252447}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1871082281252953345
@@ -679,8 +666,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
 --- !u!1 &1871082281272406796
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,8 +735,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
 --- !u!1 &1871082281277574978
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,5 +1043,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTagName: Wall
-  Obstruction: 0
-  Object: {fileID: 0}
+--- !u!1 &4884088805550105300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2593411163409252447}
+  m_Layer: 0
+  m_Name: Player1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2593411163409252447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884088805550105300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1871082281235162482}
+  - {fileID: 1871082280039894143}
+  - {fileID: 1871082280450949158}
+  m_Father: {fileID: 1871082280569255551}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
