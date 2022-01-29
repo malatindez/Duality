@@ -13,29 +13,39 @@ namespace Parkour
         private const float Mass = 1.0f;
 
 #pragma warning disable S1104 // Unity inspector
-        [Space(10)]
+        [Space()]
+        [UnityEngine.Header("REFERENCES")]
         public Animator CameraAnimator;
 
         [Space(10)]
+        [UnityEngine.Header("WALK")]
 
-        public float WalkStartUpTime = 10.0f;
-        public float WalkSpeed = 1.0f;
-        public float StrafeSpeed = 2.0f;
+        public float WalkStartUpTime = 0.4f;
+        public float WalkSpeed = 7.0f;
+        public float StrafeSpeed = 7.0f;
 
-        [UnityEngine.Header("Call RecalculateDrag() to change on run-time")]
-        public float WalkFalloutTime = 0.1f;
+        [Space(-10)]
+        [UnityEngine.Header("   !- call RecalculateDrag() to change on run-time")]
+        public float WalkFalloutTime = 0.5f;
 
         [Space(10)]
+        [UnityEngine.Header("RUN")]
 
         public float RunStartUpTime = 1.0f;
-        public float RunSpeed = 2.0f;
+        public float RunSpeed = 20.0f;
 
-        [UnityEngine.Header("Call RecalculateDrag() to change on run-time")]
-        public float RunFalloutTime = 0.1f;
+        [Space(-10)]
+        [UnityEngine.Header("   !- call RecalculateDrag() to change on run-time")]
+        public float RunFalloutTime = 2.0f;
 
         [Space(10)]
 
-        public float VaultTime = 1.0f;
+        public float OnAirDrag = 10.0f;
+
+        [Space(10)]
+        [UnityEngine.Header("VAULT AND CLIMB")]
+
+        public float VaultTime = 0.6f;
 
 #pragma warning restore S1104 // Unity inspector
 
