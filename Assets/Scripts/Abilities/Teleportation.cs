@@ -6,7 +6,7 @@ namespace Abilities
 {
     public class Teleportation : Ability
     {
-        [SerializeField] private float _range;
+        [SerializeField] private float _range = 1000;
         [SerializeField] private AudioClip _teleportationSound;
 
         private RaycastHit _lastRaycastHit;
