@@ -8,13 +8,14 @@ namespace Abilities
     {
         [SerializeField] private float _range = 1000;
         [SerializeField] private AudioClip _teleportationSound;
+        [SerializeField] private Camera _camera;
 
         private RaycastHit _lastRaycastHit;
-        private Camera _camera;
 
         protected override void StartInternal()
         {
-            _camera = Camera.main;
+            if (_camera == null)
+                _camera = Camera.main;
         }
 
         protected override void UpdateInternal()
@@ -33,7 +34,7 @@ namespace Abilities
             Vector3 origin = transform.position;
             Vector3 direaction = _camera.transform.forward;
 
-            if (Physics.Raycast(origin, direaction, out _lastRaycastHit, _range))
+            if (Physics.Raycast(origin, direaction, out _lastRaycastHit, _range, Constants.MainUniverseLayerMask))
             {
                 return _lastRaycastHit.collider.gameObject;
             }
@@ -45,6 +46,8 @@ namespace Abilities
 
         private void TeleportToLookAt()
         {
+            Debug.Log("Teleportation called");
+
             transform.position = _lastRaycastHit.point + _lastRaycastHit.normal * 1.5f;
             if (_teleportationSound != null)
                 AudioSource.PlayClipAtPoint(_teleportationSound, transform.position);
