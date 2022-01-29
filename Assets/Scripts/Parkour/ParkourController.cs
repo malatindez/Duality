@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿// Written by BerezkovN
+// https://github.com/BerezkovN
+
+using UnityEngine;
 
 namespace Parkour
 {
     [RequireComponent(typeof(Rigidbody))]
     public class ParkourController : MonoBehaviour
     {
-        // I take assumption that mass of the rigidbody is 1.0f to simplify calculations.
+        // I take an assumption that mass of the rigidbody is 1.0f to simplify calculations.
         // In case, if you need to have runtime mass. Just replace this with _rigidbody.mass
         private const float Mass = 1.0f;
 
@@ -30,10 +33,15 @@ namespace Parkour
         [UnityEngine.Header("Call RecalculateDrag() to change on run-time")]
         public float RunFalloutTime = 0.1f;
 
+        [Space(10)]
+
+        public float VaultTime = 1.0f;
+
 #pragma warning restore S1104 // Unity inspector
 
         private Rigidbody _rigidbody;
         private CollisionManager _collisionManager;
+        private Transform _vaultEnd;
 
         // Contains user input 
         private Vector3 _moveInput = new Vector3();
@@ -44,11 +52,16 @@ namespace Parkour
         // Timer for increasing startup speed
         private float _tWalkStartUp = 0.0f;
         private float _tRunStartUp = 0.0f;
+        private float _tParkour = 0.0f;
 
         private float _currentDrag;
         private float _walkDrag;
         private float _runDrag;
         private float _crouchDrag;
+
+        private Vector3 _parkourStartPosition = new Vector3();
+        private Vector3 _parkourEndPosition = new Vector3();
+        private Utils.InvokeOnce _parkourOnce = new Utils.InvokeOnce();
 
         // TODO : implement this.
         // private bool _onMove = false
@@ -70,7 +83,17 @@ namespace Parkour
             _collisionManager = gameObject.GetComponentInChildren<CollisionManager>();
             if (_collisionManager == null)
             {
-                Debug.LogError("ParkourController: CollisionManager was not found");
+                Debug.LogError("ParkourController: CollisionManager component was not found.");
+            }
+
+            _vaultEnd = gameObject.transform.RecursiveFind("VaultEnd");
+            if (_vaultEnd == null)
+            {
+                Debug.LogError("ParkourController: VaultEnd gameobject was not found.");
+            }
+            else
+            {
+                _vaultEnd.position -= _collisionManager.Ground.gameObject.transform.localPosition;
             }
 
             RecalculateDrag();
@@ -92,11 +115,34 @@ namespace Parkour
                 Debug.Log("OnDebug()");
             }
 
+            
 
+            /* Vault */
+            if ((_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
+                || (_parkourOnce.IsInvoked && _tParkour / VaultTime <= 1.0f))
+            {
+                _parkourOnce.Invoke(() =>
+                {
+                    _rigidbody.isKinematic = true;
+                    CameraAnimator.CrossFade("Vault", 0.1f);
 
+                    _parkourStartPosition = gameObject.transform.position;
+                    _parkourEndPosition = _vaultEnd.position;
+                });
+
+                _tParkour += Time.deltaTime;
+                gameObject.transform.position = Vector3.Lerp(_parkourStartPosition, _parkourEndPosition, _tParkour / VaultTime);
+            }
+            else
+            {
+                _parkourOnce.Reset();
+                _tParkour = 0.0f;
+                _rigidbody.isKinematic = false;
+            }
 
             /* Physics */
             // Convert rigidbody's velocity to local velocity (it means that it takes rotation into account)
+            // Temporarly not inside if statement.
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
 
             // Camera FOV animation that depends on speed.
@@ -104,12 +150,13 @@ namespace Parkour
 
             if (_collisionManager.Ground.IsColliding)
             {
+                /* Movement */
                 _rigidbody.useGravity = false;
                 float wantedSpeed = 0.0f;
 
                 if (_moveInput.y != 0.0f)
                 {
-                    // If shift pressed, already reached walk speed and moving forwards
+                    // If shift pressed AND already reached walk speed AND moving forwards
                     if (shiftPressed && _relativeVelocity.magnitude >= WalkSpeed - 0.5f && _moveInput.y > 0.0f)
                     {
                         wantedSpeed = RunSpeed;
@@ -154,6 +201,12 @@ namespace Parkour
 
                 // In case something unexpected happens (like little bump) we don't start flying.
                 _relativeVelocity.y = 0.0f;
+
+                /* Jump */
+                if (jumpPressed)
+                {
+                    _rigidbody.AddForce(Vector3.up * 4.0f, ForceMode.Impulse);
+                }
             }
             else
             {

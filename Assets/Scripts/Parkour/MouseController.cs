@@ -19,6 +19,13 @@ namespace Parkour
         public float SmoothTime = 5f;
 #pragma warning restore S1104 // Unity inspector
 
+        /// <summary>
+        /// Rigidbody relies on physics FPS, buy physics FPS is usually lower than actual FPS.
+        /// Thus, when player moves fast, MouseControl updates input too fast, thus making some dragy effect.
+        /// To fix this issue, set this property to true.
+        /// </summary>
+        public bool MovingFast { get; set; } = false;
+
         void Start()
         {
             _playerTransform = gameObject.transform;
@@ -85,9 +92,20 @@ namespace Parkour
             }
         }
 
-        void FixedUpdate()
+        private void Update()
         {
-            InputRotation();
+            if (!MovingFast)
+            {
+                InputRotation();
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            if (MovingFast)
+            {
+                InputRotation();
+            }
         }
     }
 }

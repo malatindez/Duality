@@ -7,6 +7,8 @@ namespace Parkour
     public class CollisionManager : MonoBehaviour
     {
         public CollisionDetector Ground { get; set; }
+        public CollisionDetector VaultObject { get; set; }
+        public CollisionDetector VaultObstruction { get; set; }
 
         /// <summary>
         /// Finds child GameObject with name <paramref name="gameObjectName"/> and returns component's reference.
@@ -41,6 +43,8 @@ namespace Parkour
             // So it's just finds them by names.
 
             Ground = InitDetector(nameof(Ground));
+            VaultObject = InitDetector(nameof(VaultObject));
+            VaultObstruction = InitDetector(nameof(VaultObstruction));
         }
     }
 
