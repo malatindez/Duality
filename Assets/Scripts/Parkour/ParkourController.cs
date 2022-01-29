@@ -115,8 +115,6 @@ namespace Parkour
                 Debug.Log("OnDebug()");
             }
 
-            
-
             /* Vault */
             if ((_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
                 || (_parkourOnce.IsInvoked && _tParkour / VaultTime <= 1.0f))

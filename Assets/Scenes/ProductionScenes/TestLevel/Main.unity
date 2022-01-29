@@ -470,7 +470,12 @@ PrefabInstance:
     - target: {fileID: 8632418114214026644, guid: 91218553659e8a949b9cca0e9baf7fb8,
         type: 3}
       propertyPath: VaultTime
-      value: 0.5
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632418114214026644, guid: 91218553659e8a949b9cca0e9baf7fb8,
+        type: 3}
+      propertyPath: StrafeSpeed
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8632418114214026647, guid: 91218553659e8a949b9cca0e9baf7fb8,
         type: 3}
