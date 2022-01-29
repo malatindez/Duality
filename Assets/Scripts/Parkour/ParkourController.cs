@@ -48,6 +48,7 @@ namespace Parkour
         private float _currentDrag;
         private float _walkDrag;
         private float _runDrag;
+        private float _crouchDrag;
 
         /// <summary>
         /// Drag is calculated at start. In case you need to change XXXFalloutTime in run-time, call this procedure.
@@ -138,6 +139,8 @@ namespace Parkour
 
                 // It's important to always set it so no drifting occurs.
                 _relativeVelocity.x = _moveInput.x * StrafeSpeed;
+
+                _relativeVelocity.y = 0.0f;
             }
 
             _rigidbody.velocity = transform.TransformDirection(_relativeVelocity);

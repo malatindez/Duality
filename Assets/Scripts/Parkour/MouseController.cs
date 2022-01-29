@@ -30,6 +30,8 @@ namespace Parkour
 
             _characterTargetRot = _playerTransform.localRotation;
             _cameraTargetRot = _cameraTransform.localRotation;
+
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         /// <summary>
@@ -56,7 +58,10 @@ namespace Parkour
         /// </summary>
         private void InputRotation()
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                return;
+            }
 
             float yRot = Input.GetAxis("Mouse X") * XSensitivity;
             float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
