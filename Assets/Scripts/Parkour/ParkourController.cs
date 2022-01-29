@@ -50,8 +50,9 @@ namespace Parkour
         private float _runDrag;
         private float _crouchDrag;
 
-        private bool _onMove = false;
-        private float _startSpeed = 0.0f;
+        // TODO : implement this.
+        // private bool _onMove = false
+        // private float _startSpeed = 0.0f
 
         /// <summary>
         /// Drag is calculated at start. In case you need to change XXXFalloutTime in run-time, call this procedure.
@@ -90,14 +91,11 @@ namespace Parkour
                 Debug.Log("OnDebug()");
             }
 
-            if (shiftPressed)
-            {
-                Debug.Log("OnDebug()");
-            }
+
+
 
             /* Physics */
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
-
             CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(_relativeVelocity.z, 3));
 
             if (_collisionManager.Ground.IsColliding)
@@ -107,13 +105,7 @@ namespace Parkour
 
                 if (_moveInput.y != 0.0f)
                 {
-                    if (!_onMove)
-                    {
-                        _startSpeed = _relativeVelocity.magnitude;
-                        _onMove = true;
-                    }
-
-                    if (shiftPressed && _relativeVelocity.magnitude >= WalkSpeed - 0.2f)
+                    if (shiftPressed && _relativeVelocity.magnitude >= WalkSpeed - 0.5f && _moveInput.y > 0.0f)
                     {
                         wantedSpeed = RunSpeed;
                         _currentDrag = _runDrag;
@@ -129,15 +121,13 @@ namespace Parkour
                 else
                 {
                     _tWalkStartUp = 0.0f;
-
-                    _onMove = false;
                 }
 
                 if (_relativeVelocity.magnitude - 0.1f <= wantedSpeed)
                 {
                     if (wantedSpeed == RunSpeed)
                     {
-                        _relativeVelocity.z = Mathf.Lerp(_startSpeed, RunSpeed, _tRunStartUp / RunStartUpTime);
+                        _relativeVelocity.z = Mathf.Lerp(WalkSpeed, RunSpeed, _tRunStartUp / RunStartUpTime);
                         _tRunStartUp += Time.deltaTime;
                     }
                     else
