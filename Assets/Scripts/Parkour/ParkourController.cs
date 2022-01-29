@@ -40,18 +40,20 @@ namespace Parkour
 
         [Space(10)]
 
-        public float OnAirDrag = 10.0f;
+        public float AirAdditionalForce = 3.0f;
 
         [Space(10)]
         [UnityEngine.Header("VAULT AND CLIMB")]
 
         public float VaultTime = 0.6f;
+        public float ClimbTime = 1.0f;
 
 #pragma warning restore S1104 // Unity inspector
 
         private Rigidbody _rigidbody;
         private CollisionManager _collisionManager;
         private Transform _vaultEnd;
+        private Transform _climbEnd;
 
         // Contains user input 
         private Vector3 _moveInput = new Vector3();
@@ -71,7 +73,9 @@ namespace Parkour
 
         private Vector3 _parkourStartPosition = new Vector3();
         private Vector3 _parkourEndPosition = new Vector3();
-        private Utils.InvokeOnce _parkourOnce = new Utils.InvokeOnce();
+
+        private readonly Utils.InvokeOnce _parkourOnce = new Utils.InvokeOnce();
+        private readonly Utils.InvokeOnce _jumpFallOnce = new Utils.InvokeOnce();
 
         // TODO : implement this.
         // private bool _onMove = false
@@ -106,6 +110,16 @@ namespace Parkour
                 _vaultEnd.position -= _collisionManager.Ground.gameObject.transform.localPosition;
             }
 
+            _climbEnd = gameObject.transform.RecursiveFind("ClimbEnd");
+            if (_climbEnd == null)
+            {
+                Debug.LogError("ParkourController: climbEnd gameobject was not found.");
+            }
+            else
+            {
+                _climbEnd.position -= _collisionManager.Ground.gameObject.transform.localPosition;
+            }
+
             RecalculateDrag();
         }
 
@@ -127,7 +141,7 @@ namespace Parkour
 
             /* Vault */
             if ((_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
-                || (_parkourOnce.IsInvoked && _tParkour / VaultTime <= 1.0f))
+                || (_parkourOnce.WasInvoked && _tParkour / VaultTime <= 1.0f))
             {
                 _parkourOnce.Invoke(() =>
                 {
@@ -213,12 +227,24 @@ namespace Parkour
                 /* Jump */
                 if (jumpPressed)
                 {
-                    _rigidbody.AddForce(Vector3.up * 4.0f, ForceMode.Impulse);
+                    _rigidbody.AddRelativeForce(Vector3.up * 4.0f, ForceMode.Impulse);
                 }
+
+                _jumpFallOnce.Reset();
             }
             else
             {
                 _rigidbody.useGravity = true;
+
+                if (!jumpPressed || _jumpFallOnce.WasInvoked)
+                {
+                    _jumpFallOnce.Invoke(() =>
+                    {
+
+                    });
+
+                    _rigidbody.AddRelativeForce(Vector3.down * AirAdditionalForce);
+                }
             }
 
             _rigidbody.velocity = transform.TransformDirection(_relativeVelocity);
