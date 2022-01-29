@@ -2,20 +2,20 @@
 {
     class InvokeOnce
     {
-        public bool IsInvoked { get; set; } = false;
+        public bool WasInvoked { get; set; } = false;
 
         public void Invoke(System.Action action)
         {
-            if (!IsInvoked)
+            if (!WasInvoked)
             {
                 action?.Invoke();
-                IsInvoked = true;
+                WasInvoked = true;
             }
         }
 
         public void Reset()
         {
-            IsInvoked = false;
+            WasInvoked = false;
         }
     }
 }
