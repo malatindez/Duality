@@ -85,7 +85,7 @@ namespace Parkour
             }
         }
 
-        void Update()
+        void FixedUpdate()
         {
             InputRotation();
         }

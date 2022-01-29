@@ -78,6 +78,7 @@ namespace Parkour
 
         private void Update()
         {
+            /* Get conrols */
             _moveInput.x = Input.GetAxisRaw("Horizontal");
             _moveInput.y = Input.GetAxisRaw("Vertical");
             _moveInput.Normalize();
@@ -95,7 +96,10 @@ namespace Parkour
 
 
             /* Physics */
+            // Convert rigidbody's velocity to local velocity (it means that it takes rotation into account)
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+
+            // Camera FOV animation that depends on speed.
             CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(_relativeVelocity.z, 3));
 
             if (_collisionManager.Ground.IsColliding)
@@ -105,6 +109,7 @@ namespace Parkour
 
                 if (_moveInput.y != 0.0f)
                 {
+                    // If shift pressed, already reached walk speed and moving forwards
                     if (shiftPressed && _relativeVelocity.magnitude >= WalkSpeed - 0.5f && _moveInput.y > 0.0f)
                     {
                         wantedSpeed = RunSpeed;
@@ -123,6 +128,7 @@ namespace Parkour
                     _tWalkStartUp = 0.0f;
                 }
 
+                // Constantly checking if we reached wanted speed
                 if (_relativeVelocity.magnitude - 0.1f <= wantedSpeed)
                 {
                     if (wantedSpeed == RunSpeed)
@@ -136,15 +142,22 @@ namespace Parkour
                         _tWalkStartUp += Time.deltaTime;
                     }
                 }
+                // If we exceeded wanted speed, we apply drag.
                 else
                 {
-                    // Custom drag.
+                    // I don't use rigibody's drag because I need to apply only to one z axis.
                     _relativeVelocity.z *= Mathf.Clamp01(1.0f - _currentDrag * Time.deltaTime);
                 }
 
                 // It's important to always set it so no drifting occurs.
                 _relativeVelocity.x = _moveInput.x * StrafeSpeed;
+
+                // In case something unexpected happens (like little bump) we don't start flying.
                 _relativeVelocity.y = 0.0f;
+            }
+            else
+            {
+                _rigidbody.useGravity = true;
             }
 
             _rigidbody.velocity = transform.TransformDirection(_relativeVelocity);

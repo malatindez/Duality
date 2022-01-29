@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/ProductionScenes/Main Alternate.unity
+    path: Assets/Scenes/ProductionScenes/TestLevel/Main Alternate.unity
     guid: c1bb9855c217f6645be90f9bdca7ba91
   - enabled: 1
-    path: Assets/Scenes/ProductionScenes/Main.unity
+    path: Assets/Scenes/ProductionScenes/TestLevel/Main.unity
     guid: 8244f3900b3897c44b0891f83952c995
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9539a21d813f9b246aeeeb98d5379907,
