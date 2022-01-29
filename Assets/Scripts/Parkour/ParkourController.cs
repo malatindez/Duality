@@ -50,6 +50,9 @@ namespace Parkour
         private float _runDrag;
         private float _crouchDrag;
 
+        private bool _onMove = false;
+        private float _startSpeed = 0.0f;
+
         /// <summary>
         /// Drag is calculated at start. In case you need to change XXXFalloutTime in run-time, call this procedure.
         /// </summary>
@@ -87,59 +90,70 @@ namespace Parkour
                 Debug.Log("OnDebug()");
             }
 
+            if (shiftPressed)
+            {
+                Debug.Log("OnDebug()");
+            }
+
             /* Physics */
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
 
+            CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(_relativeVelocity.z, 3));
+
             if (_collisionManager.Ground.IsColliding)
             {
+                _rigidbody.useGravity = false;
+                float wantedSpeed = 0.0f;
+
                 if (_moveInput.y != 0.0f)
                 {
-                    // Interpolate speed so it's accumulates during startup.
-                    _relativeVelocity.z = _moveInput.y * Mathf.Lerp(0.0f, WalkSpeed, _tWalkStartUp / WalkStartUpTime);
-
-                    // if(User pressed shift && Walk startup already finished and walks forwards)
-                    if (shiftPressed && _relativeVelocity.z >= WalkSpeed)
+                    if (!_onMove)
                     {
-                        _relativeVelocity.z = Mathf.Lerp(WalkSpeed, RunSpeed, _tRunStartUp / RunStartUpTime);
-                        _tRunStartUp += Time.deltaTime;
-                        _currentDrag = _runDrag;
+                        _startSpeed = _relativeVelocity.magnitude;
+                        _onMove = true;
+                    }
 
-                        CameraAnimator.SetBool("Run", true);
+                    if (shiftPressed && _relativeVelocity.magnitude >= WalkSpeed - 0.2f)
+                    {
+                        wantedSpeed = RunSpeed;
+                        _currentDrag = _runDrag;
                     }
                     else
                     {
                         _tRunStartUp = 0.0f;
+
+                        wantedSpeed = WalkSpeed;
                         _currentDrag = _walkDrag;
-
-                        CameraAnimator.SetBool("Run", false);
                     }
-
-                    _tWalkStartUp += Time.deltaTime;
-
-                    CameraAnimator.SetBool("Walk", true);
                 }
                 else
                 {
                     _tWalkStartUp = 0.0f;
 
-                    // Custom drag.
-                    _relativeVelocity.z *= Mathf.Clamp01(1.0f - _currentDrag * Time.deltaTime);
-
-                    // In case of no input, simply disable animation.
-                    if (_moveInput.x == 0.0f)
-                    {
-                        CameraAnimator.SetBool("Walk", false);
-                    }
+                    _onMove = false;
                 }
 
-                if (_moveInput.x != 0)
+                if (_relativeVelocity.magnitude - 0.1f <= wantedSpeed)
                 {
-                    CameraAnimator.SetBool("Walk", true);
+                    if (wantedSpeed == RunSpeed)
+                    {
+                        _relativeVelocity.z = Mathf.Lerp(_startSpeed, RunSpeed, _tRunStartUp / RunStartUpTime);
+                        _tRunStartUp += Time.deltaTime;
+                    }
+                    else
+                    {
+                        _relativeVelocity.z = _moveInput.y * Mathf.Lerp(0.0f, WalkSpeed, _tWalkStartUp / WalkStartUpTime);
+                        _tWalkStartUp += Time.deltaTime;
+                    }
+                }
+                else
+                {
+                    // Custom drag.
+                    _relativeVelocity.z *= Mathf.Clamp01(1.0f - _currentDrag * Time.deltaTime);
                 }
 
                 // It's important to always set it so no drifting occurs.
                 _relativeVelocity.x = _moveInput.x * StrafeSpeed;
-
                 _relativeVelocity.y = 0.0f;
             }
 

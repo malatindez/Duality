@@ -59,6 +59,8 @@ GameObject:
   - component: {fileID: 8632418114214026665}
   - component: {fileID: 8632418114214026664}
   - component: {fileID: 8632418114214026644}
+  - component: {fileID: 430249851}
+  - component: {fileID: 430249852}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -131,7 +133,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &8632418114214026664
 MonoBehaviour:
@@ -164,13 +166,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraAnimator: {fileID: 8632418114743877638}
-  WalkStartUpTime: 0.1
+  WalkStartUpTime: 0.4
   WalkSpeed: 7
   StrafeSpeed: 8
-  WalkFalloutTime: 0.3
+  WalkFalloutTime: 0.5
   RunStartUpTime: 1
   RunSpeed: 30
-  RunFalloutTime: 1
+  RunFalloutTime: 2
+--- !u!114 &430249851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8632418114214026667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01728321235037c4693bf427508ff8c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectedAbilitySprite: {fileID: 0}
+  _abilityImage: {fileID: 0}
+  _arrowImage: {fileID: 0}
+  _wheel: {fileID: 0}
+--- !u!114 &430249852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8632418114214026667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c872a4602385f4ebbc58757e03f3d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 8632418114743877659}
 --- !u!1 &8632418114509402169
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +271,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8632418114743877656}
   - component: {fileID: 8632418114743877659}
-  - component: {fileID: 8632418114743877658}
   - component: {fileID: 8632418114743877657}
   - component: {fileID: 8632418114743877638}
   m_Layer: 0
@@ -308,14 +338,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &8632418114743877658
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8632418114743877661}
-  m_Enabled: 1
 --- !u!114 &8632418114743877657
 MonoBehaviour:
   m_ObjectHideFlags: 0
