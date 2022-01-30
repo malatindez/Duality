@@ -24,12 +24,6 @@ namespace Parkour
         /// </summary>
         public Collider DetectedCollider { get; private set; }
 
-        private void Start()
-        {
-            // Just to insure it's a detector.
-            gameObject.GetComponent<Collider>().isTrigger = true;
-        }
-
         private void OnTriggerStay(Collider other)
         {
             if (other.CompareTag(TagToDetect))

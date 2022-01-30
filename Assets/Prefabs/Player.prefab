@@ -496,6 +496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2210887c659d3af469d5f2aca422a28e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 8980763474106668185}
 --- !u!1 &8632418114214026667
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,6 +510,7 @@ GameObject:
   - component: {fileID: 8632418114214026645}
   - component: {fileID: 8632418114214026665}
   - component: {fileID: 8632418114214026664}
+  - component: {fileID: 8980763474106668185}
   - component: {fileID: 8632418114214026644}
   - component: {fileID: 430249851}
   - component: {fileID: 430249852}
@@ -606,6 +608,19 @@ MonoBehaviour:
   MaximumX: 90
   Smooth: 0
   SmoothTime: 5
+--- !u!114 &8980763474106668185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8632418114214026667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2f67c01508cc2e488a901dfa3530f51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TagToDetect: Parkour
 --- !u!114 &8632418114214026644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,8 +641,9 @@ MonoBehaviour:
   RunStartUpTime: 1
   RunSpeed: 20
   RunFalloutTime: 2
-  OnAirDrag: 10
+  AirAdditionalForce: 3
   VaultTime: 0.6
+  ClimbTime: 1
 --- !u!114 &430249851
 MonoBehaviour:
   m_ObjectHideFlags: 0

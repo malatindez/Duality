@@ -6,6 +6,8 @@ namespace Parkour
 {
     public class CollisionManager : MonoBehaviour
     {
+        public CollisionDetector Player;
+
         public CollisionDetector Ground { get; set; }
         public CollisionDetector VaultObject { get; set; }
         public CollisionDetector VaultObstruction { get; set; }

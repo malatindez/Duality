@@ -76,13 +76,16 @@ namespace Parkour
 
         private readonly Utils.InvokeOnce _parkourOnce = new Utils.InvokeOnce();
 
-        // TODO : implement this.
-        // private bool _onMove = false
-        // private float _startSpeed = 0.0f
+        private readonly Utils.InvokeOnce _jumpOnce = new Utils.InvokeOnce();
+        private float _onAirVelocity;
+
+        private readonly Utils.InvokeOnce _startOnce = new Utils.InvokeOnce();
+        private float _startSpeed = 0.0f;
 
         /// <summary>
         /// Drag is calculated at start. In case you need to change XXXFalloutTime in run-time, call this procedure.
         /// </summary>
+        [ContextMenu("Recalculate Drag")]
         public void RecalculateDrag()
         {
             _walkDrag = (-1 * Mathf.Pow(0.1f / WalkSpeed, Time.fixedDeltaTime / WalkFalloutTime) + 1) / Time.fixedDeltaTime;
@@ -127,7 +130,6 @@ namespace Parkour
             /* Get conrols */
             _moveInput.x = Input.GetAxisRaw("Horizontal");
             _moveInput.y = Input.GetAxisRaw("Vertical");
-            _moveInput.Normalize();
 
             bool jumpPressed = Input.GetKey(KeyCode.Space);
             bool shiftPressed = Input.GetKey(KeyCode.LeftShift);
@@ -165,9 +167,14 @@ namespace Parkour
             // Convert rigidbody's velocity to local velocity (it means that it takes rotation into account)
             // Temporarly not inside if statement.
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+            Debug.Log(_relativeVelocity);
 
             // Camera FOV animation that depends on speed.
-            CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(_relativeVelocity.z, 3));
+            if (!_collisionManager.VaultObject.IsColliding)
+            {
+                float interpolatedVelocity = _relativeVelocity.z * Mathf.Pow(_relativeVelocity.z / RunSpeed, 1.5f);
+                CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(interpolatedVelocity, 3));
+            }
 
             if (_collisionManager.Ground.IsColliding)
             {
@@ -180,6 +187,8 @@ namespace Parkour
                     // If shift pressed AND already reached walk speed AND moving forwards
                     if (shiftPressed && _relativeVelocity.magnitude >= WalkSpeed - 0.5f && _moveInput.y > 0.0f)
                     {
+                        _startSpeed = WalkSpeed;
+
                         wantedSpeed = RunSpeed;
                         _currentDrag = _runDrag;
                     }
@@ -187,26 +196,34 @@ namespace Parkour
                     {
                         _tRunStartUp = 0.0f;
 
+                        _startOnce.Invoke(() =>
+                        {
+                            _startSpeed = -Mathf.Abs(_relativeVelocity.z);
+                            _tWalkStartUp = 0.0f;
+                        });
+
                         wantedSpeed = WalkSpeed;
                         _currentDrag = _walkDrag;
                     }
                 }
                 else
                 {
+                    _startOnce.Reset();
                     _tWalkStartUp = 0.0f;
                 }
 
                 // Constantly checking if we reached wanted speed
-                if (_relativeVelocity.magnitude - 0.1f <= wantedSpeed)
+                if (Mathf.Abs(_relativeVelocity.z) - 0.1f <= wantedSpeed)
                 {
+
                     if (wantedSpeed == RunSpeed)
                     {
                         _relativeVelocity.z = Mathf.Lerp(WalkSpeed, RunSpeed, _tRunStartUp / RunStartUpTime);
                         _tRunStartUp += Time.deltaTime;
                     }
-                    else
+                    else if (wantedSpeed == WalkSpeed)
                     {
-                        _relativeVelocity.z = _moveInput.y * Mathf.Lerp(0.0f, WalkSpeed, _tWalkStartUp / WalkStartUpTime);
+                        _relativeVelocity.z = _moveInput.y * Mathf.Lerp(_startSpeed, WalkSpeed, _tWalkStartUp / WalkStartUpTime);
                         _tWalkStartUp += Time.deltaTime;
                     }
                 }
@@ -228,10 +245,22 @@ namespace Parkour
                 {
                     _rigidbody.AddRelativeForce(Vector3.up * 4.0f, ForceMode.Impulse);
                 }
+
+                _jumpOnce.Reset();
             }
             else
             {
                 _rigidbody.useGravity = true;
+
+                if (!_collisionManager.Player.IsColliding)
+                {
+                    _jumpOnce.Invoke(() =>
+                    {
+                        _onAirVelocity = _relativeVelocity.z;
+                    });
+
+                    _relativeVelocity.z = _onAirVelocity;
+                }
             }
 
             _rigidbody.velocity = transform.TransformDirection(_relativeVelocity);
