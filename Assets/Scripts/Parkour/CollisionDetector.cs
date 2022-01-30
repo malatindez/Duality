@@ -24,7 +24,7 @@ namespace Parkour
         /// </summary>
         public Collider DetectedCollider { get; private set; }
 
-        private void OnTriggerStay(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(TagToDetect))
             {
