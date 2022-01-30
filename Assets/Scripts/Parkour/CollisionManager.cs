@@ -11,6 +11,7 @@ namespace Parkour
         public CollisionDetector Ground { get; set; }
         public CollisionDetector VaultObject { get; set; }
         public CollisionDetector VaultObstruction { get; set; }
+        public CollisionDetector VaultThroughObject { get; set; }
         public CollisionDetector ClimbObject { get; set; }
         public CollisionDetector ClimbObstruction { get; set; }
 
@@ -50,6 +51,7 @@ namespace Parkour
 
             VaultObject = InitDetector(nameof(VaultObject));
             VaultObstruction = InitDetector(nameof(VaultObstruction));
+            VaultThroughObject = InitDetector(nameof(VaultThroughObject));
 
             ClimbObject = InitDetector(nameof(ClimbObject));
             ClimbObstruction = InitDetector(nameof(ClimbObstruction));

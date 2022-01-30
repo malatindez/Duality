@@ -54,7 +54,10 @@ namespace Parkour
 
         private Rigidbody _rigidbody;
         private CollisionManager _collisionManager;
+
+        // Points
         private Transform _vaultEnd;
+        private Transform _vaultThrough;
         private Transform _climbEnd;
 
         // Contains user input 
@@ -133,6 +136,16 @@ namespace Parkour
                 _climbEnd.position -= _collisionManager.Ground.gameObject.transform.localPosition;
             }
 
+            _vaultThrough = gameObject.transform.RecursiveFind("VaultThrough");
+            if (_vaultThrough == null)
+            {
+                Debug.LogError("ParkourController: vaultThrough gameobject was not found.");
+            }
+            else
+            {
+                _vaultThrough.position -= _collisionManager.Ground.gameObject.transform.localPosition;
+            }
+
             RecalculateDrag();
         }
 
@@ -151,13 +164,27 @@ namespace Parkour
                 Debug.Log("OnDebug()");
             }
 
+            /* Vault through */
+            if (_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultThroughObject.IsColliding && jumpPressed && _moveInput.y > 0.0f)
+            {
+                _parkourOnce.Invoke(() =>
+                {
+                    _rigidbody.isKinematic = true;
+                    CameraAnimator.CrossFade(Random.Range(0, 2) == 0 ? "VaultRight" : "VaultLeft", 0.1f);
+
+                    _parkourStartPosition = gameObject.transform.position;
+                    _parkourEndPosition = _vaultThrough.position;
+                    _currentParkourTime = VaultTime;
+                });
+            }
+
             /* Vault */
             if (_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
             {
                 _parkourOnce.Invoke(() =>
                 {
                     _rigidbody.isKinematic = true;
-                    CameraAnimator.CrossFade("Vault", 0.1f);
+                    CameraAnimator.CrossFade(Random.Range(0, 2) == 0 ? "VaultRight" : "VaultLeft", 0.1f);
 
                     _parkourStartPosition = gameObject.transform.position;
                     _parkourEndPosition = _vaultEnd.position;
