@@ -468,11 +468,6 @@ PrefabInstance:
       propertyPath: _selectedAbilitySprite
       value: 
       objectReference: {fileID: 1310741614}
-    - target: {fileID: 8632418114214026644, guid: 91218553659e8a949b9cca0e9baf7fb8,
-        type: 3}
-      propertyPath: StrafeSpeed
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 8632418114214026647, guid: 91218553659e8a949b9cca0e9baf7fb8,
         type: 3}
       propertyPath: m_RootOrder
@@ -532,16 +527,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8632418114743877656, guid: 91218553659e8a949b9cca0e9baf7fb8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8632418114743877656, guid: 91218553659e8a949b9cca0e9baf7fb8,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91218553659e8a949b9cca0e9baf7fb8, type: 3}
