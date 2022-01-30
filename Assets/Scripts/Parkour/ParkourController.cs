@@ -92,6 +92,11 @@ namespace Parkour
             _runDrag = (-1 * Mathf.Pow(0.1f / RunSpeed, Time.fixedDeltaTime / RunFalloutTime) + 1) / Time.fixedDeltaTime;
         }
 
+        public float CameraInterpolation(float speed)
+        {
+            return speed * Mathf.Pow(_relativeVelocity.z / RunSpeed, 1.5f);
+        }
+
         private void Start()
         {
             _rigidbody = gameObject.GetComponent<Rigidbody>();
@@ -169,13 +174,6 @@ namespace Parkour
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
             Debug.Log(_relativeVelocity);
 
-            // Camera FOV animation that depends on speed.
-            if (!_collisionManager.VaultObject.IsColliding)
-            {
-                float interpolatedVelocity = _relativeVelocity.z * Mathf.Pow(_relativeVelocity.z / RunSpeed, 1.5f);
-                CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(interpolatedVelocity, 3));
-            }
-
             if (_collisionManager.Ground.IsColliding)
             {
                 /* Movement */
@@ -198,7 +196,7 @@ namespace Parkour
 
                         _startOnce.Invoke(() =>
                         {
-                            _startSpeed = -Mathf.Abs(_relativeVelocity.z);
+                            _startSpeed = -Mathf.Abs(Mathf.Clamp(_relativeVelocity.z, - WalkSpeed, WalkSpeed));
                             _tWalkStartUp = 0.0f;
                         });
 
@@ -234,6 +232,12 @@ namespace Parkour
                     _relativeVelocity.z *= Mathf.Clamp01(1.0f - _currentDrag * Time.deltaTime);
                 }
 
+                // Camera FOV animation that depends on speed.
+                if (!_collisionManager.VaultObject.IsColliding)
+                {
+                    CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(CameraInterpolation(_relativeVelocity.z), 3));
+                }
+
                 // It's important to always set it so no drifting occurs.
                 _relativeVelocity.x = _moveInput.x * StrafeSpeed;
 
@@ -243,7 +247,7 @@ namespace Parkour
                 /* Jump */
                 if (jumpPressed)
                 {
-                    _rigidbody.AddRelativeForce(Vector3.up * 4.0f, ForceMode.Impulse);
+                    _relativeVelocity.y = 4.0f;
                 }
 
                 _jumpOnce.Reset();
@@ -261,6 +265,8 @@ namespace Parkour
 
                     _relativeVelocity.z = _onAirVelocity;
                 }
+
+                //CameraAnimator.SetFloat("Velocity", (float)System.Math.Round(CameraInterpolation(_onAirVelocity), 3));
             }
 
             _rigidbody.velocity = transform.TransformDirection(_relativeVelocity);
