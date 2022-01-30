@@ -27,6 +27,7 @@ public class Fadeout : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Escape))
         {
             _beginning = 0f;
+            _image.color = new Color(0, 0, 0, 0);
         }
     }
 }
