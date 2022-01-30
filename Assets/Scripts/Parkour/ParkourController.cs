@@ -165,7 +165,7 @@ namespace Parkour
             }
 
             /* Vault through */
-            if (_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultThroughObject.IsColliding && jumpPressed && _moveInput.y > 0.0f)
+            if (_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && !_collisionManager.VaultThroughObject.IsColliding && jumpPressed && _moveInput.y > 0.0f)
             {
                 _parkourOnce.Invoke(() =>
                 {
@@ -304,6 +304,17 @@ namespace Parkour
             else
             {
                 _rigidbody.useGravity = true;
+                
+                /* Wall run */
+                if (_collisionManager.WallLeft.IsColliding || _collisionManager.WallRight.IsColliding)
+                {
+                    Vector3 closestPoint = _collisionManager.WallRight.DetectedCollider.ClosestPoint(gameObject.transform.position);
+                    Debug.Log(closestPoint);
+
+                    Vector3 normalVector = gameObject.transform.localPosition - closestPoint;
+
+
+                }
 
                 if (!_collisionManager.Player.IsColliding)
                 {

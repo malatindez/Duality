@@ -12,8 +12,13 @@ namespace Parkour
         public CollisionDetector VaultObject { get; set; }
         public CollisionDetector VaultObstruction { get; set; }
         public CollisionDetector VaultThroughObject { get; set; }
+
         public CollisionDetector ClimbObject { get; set; }
         public CollisionDetector ClimbObstruction { get; set; }
+
+        public CollisionDetector WallLeft { get; set; }
+        public CollisionDetector WallRight { get; set; }
+
 
         /// <summary>
         /// Finds child GameObject with name <paramref name="gameObjectName"/> and returns component's reference.
@@ -23,7 +28,7 @@ namespace Parkour
         {
             CollisionDetector detector = null;
 
-            Transform groundTransform = gameObject.transform.RecursiveFind(gameObjectName);
+            Transform groundTransform = gameObject.transform.Find(gameObjectName);
             if (groundTransform != null)
             {
                 detector = groundTransform.GetComponent<CollisionDetector>();
@@ -55,6 +60,9 @@ namespace Parkour
 
             ClimbObject = InitDetector(nameof(ClimbObject));
             ClimbObstruction = InitDetector(nameof(ClimbObstruction));
+
+            WallLeft = InitDetector(nameof(WallLeft));
+            WallRight = InitDetector(nameof(WallRight));
         }
     }
 
