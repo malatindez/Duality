@@ -46,6 +46,8 @@ namespace Parkour
         [UnityEngine.Header("VAULT AND CLIMB")]
 
         public float VaultTime = 0.6f;
+
+        public float ClimbWait = 0.5f;
         public float ClimbTime = 1.0f;
 
 #pragma warning restore S1104 // Unity inspector
@@ -61,11 +63,15 @@ namespace Parkour
         // Local space velocity
         private Vector3 _relativeVelocity = new Vector3();
 
-        // Timer for increasing startup speed
+        // Timers for movement
         private float _tWalkStartUp = 0.0f;
         private float _tRunStartUp = 0.0f;
-        private float _tParkour = 0.0f;
 
+        // Timers for parkour
+        private float _tParkour = 0.0f;
+        private float _currentParkourTime;
+
+        // Drags for differenent states
         private float _currentDrag;
         private float _walkDrag;
         private float _runDrag;
@@ -146,8 +152,7 @@ namespace Parkour
             }
 
             /* Vault */
-            if ((_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
-                || (_parkourOnce.WasInvoked && _tParkour / VaultTime <= 1.0f))
+            if (_collisionManager.VaultObject.IsColliding && !_collisionManager.VaultObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
             {
                 _parkourOnce.Invoke(() =>
                 {
@@ -156,10 +161,28 @@ namespace Parkour
 
                     _parkourStartPosition = gameObject.transform.position;
                     _parkourEndPosition = _vaultEnd.position;
+                    _currentParkourTime = VaultTime;
                 });
+            }
 
+            /* Climb */
+            if (_collisionManager.ClimbObject.IsColliding && !_collisionManager.ClimbObstruction.IsColliding && jumpPressed && _moveInput.y > 0.0f)
+            {
+                _parkourOnce.Invoke(() =>
+                {
+                    _rigidbody.isKinematic = true;
+                    CameraAnimator.CrossFade("Climb", 0.1f);
+
+                    _parkourStartPosition = gameObject.transform.position;
+                    _parkourEndPosition = _climbEnd.position;
+                    _currentParkourTime = ClimbTime;
+                });
+            }
+
+            if (_parkourOnce.WasInvoked && _tParkour / _currentParkourTime <= 1.0f)
+            {
                 _tParkour += Time.deltaTime;
-                gameObject.transform.position = Vector3.Lerp(_parkourStartPosition, _parkourEndPosition, _tParkour / VaultTime);
+                gameObject.transform.position = Vector3.Lerp(_parkourStartPosition, _parkourEndPosition, _tParkour / _currentParkourTime);
             }
             else
             {
@@ -172,7 +195,6 @@ namespace Parkour
             // Convert rigidbody's velocity to local velocity (it means that it takes rotation into account)
             // Temporarly not inside if statement.
             _relativeVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
-            Debug.Log(_relativeVelocity);
 
             if (_collisionManager.Ground.IsColliding)
             {
